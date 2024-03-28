@@ -1,0 +1,1 @@
+public class ResourcePool : ItemPool<Resource> { }
