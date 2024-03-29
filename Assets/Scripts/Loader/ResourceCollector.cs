@@ -4,31 +4,31 @@ using System;
 public class ResourceCollector : MonoBehaviour
 {
     private Resource _resource;
+    private int _resourceID;
 
     public event Action ResourceLoaded;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsFull())
+        if (_resource != null)
             return;
 
-        if (other.TryGetComponent(out Resource resource))
-            if (resource.IsReserved && resource.IdRecipient == GetInstanceID())
-                LoadingResource(resource);
+        if (other.TryGetComponent(out Resource resource) &&
+            resource.GetInstanceID() == _resourceID)
+            LoadResource(resource);
     }
 
-    public bool IsFull() => _resource != null;
+    public void SetTargetId(int resourceID) => _resourceID = resourceID;
 
-    public void UnloadingResource()
+    public Resource UnloadResource()
     {
-        if (IsFull() == false)
-            return;
-
-        _resource.BackToPool();
+        Resource resource = _resource;
         _resource = null;
+
+        return resource;
     }
 
-    private void LoadingResource(Resource resource)
+    private void LoadResource(Resource resource)
     {
         _resource = resource;
         _resource.transform.parent = transform;

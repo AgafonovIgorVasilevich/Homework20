@@ -16,23 +16,14 @@ public class Loader : MonoBehaviour
 
     private void OnDisable() => _collector.ResourceLoaded -= BecomeFull;
 
-    public void Initialize(Transform factory, Transform[] waypoints)
+    public void Initialize(Route route, int idResource)
     {
         State = LoaderState.Empty;
-        StartCoroutine(_movement.Drive(waypoints));
+        _movement.Initialize(route);
+        _collector.SetTargetId(idResource);
     }
 
-    public int GetId() => _collector.GetInstanceID();
-
-    public void BackToPool()
-    {
-        _collector.UnloadingResource();
-
-        if (transform.parent.TryGetComponent(out LoaderPool pool))
-            pool.Put(this);
-        else
-            Destroy(gameObject);
-    }
+    public Resource Unload() => _collector.UnloadResource();
 
     private void BecomeFull() => State = LoaderState.Full;
 }

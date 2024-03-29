@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 5831422716779568415}
   - component: {fileID: 7833217886554111322}
   - component: {fileID: 8366576195176515816}
-  - component: {fileID: 1807908098467114586}
   - component: {fileID: 8340637795883370827}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Resource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,22 +135,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!208 &1807908098467114586
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5471201061247499466}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.15, y: 0.397, z: 0.15}
-  m_MoveThreshold: 0
-  m_Carve: 0
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0.397, z: 0.063}
-  m_TimeToStationary: 0.5
 --- !u!114 &8340637795883370827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1284e40c0b917429b72859d65af9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectEffect: {fileID: 9096317111562088914}
+  _selectEffect: {fileID: 5115776660205504675}
 --- !u!1 &9096317111562088914
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,13 +159,13 @@ GameObject:
   - component: {fileID: 8303407875313351588}
   - component: {fileID: 5115776660205504675}
   - component: {fileID: 2767683086502080399}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SelectEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8303407875313351588
 Transform:
   m_ObjectHideFlags: 0

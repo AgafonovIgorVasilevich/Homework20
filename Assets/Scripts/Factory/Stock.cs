@@ -5,13 +5,17 @@ using System;
 
 public class Stock : MonoBehaviour
 {
+    [SerializeField] private ResourcePool _resourcePool;
+    [SerializeField] private LoaderPool _loaderPool;
+
     public event Action ResourceReceived;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Loader loader) && loader.State == LoaderState.Full)
         {
-            loader.BackToPool();
+            _resourcePool.Put(loader.Unload());
+            _loaderPool.Put(loader);
             ResourceReceived?.Invoke();
         }
     }

@@ -65,7 +65,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1219292136424290890
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff607554417a8d4c9bb71702fe9d155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collector: {fileID: 7823049838779627855}
 --- !u!114 &476327580317243549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,7 +336,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!65 &855875185653700120
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -355,7 +356,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 2.4}
+  m_Size: {x: 1, y: 1, z: 2}
   m_Center: {x: 0, y: 0.5, z: 0.1}
 --- !u!1 &7387781349919349022
 GameObject:

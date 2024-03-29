@@ -47,7 +47,7 @@ public class ResourceSpawner : MonoBehaviour
         {
             if (_currentCount < _maxCount)
             {
-                _pool.Get().Initialize(GetSpawnPosition(), _pool);
+                _pool.Get().Initialize(GetSpawnPosition());
                 _currentCount++;
                 yield return _delay;
             }

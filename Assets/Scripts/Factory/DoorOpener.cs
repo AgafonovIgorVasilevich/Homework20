@@ -1,15 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 
-public class DoorController : MonoBehaviour
+public class DoorOpener : MonoBehaviour
 {
     private const string Open = nameof(Open);
 
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
 
-    private List<Loader> _loaders = new List<Loader>();
+    private int _countLoaders = 0;
 
     private void Awake() => _animator = GetComponent<Animator>();
 
@@ -17,7 +16,7 @@ public class DoorController : MonoBehaviour
     {
         if (other.TryGetComponent(out Loader loader))
         {
-            _loaders.Add(loader);
+            _countLoaders++;
             _animator.SetBool(Open, true);
         }
     }
@@ -26,9 +25,9 @@ public class DoorController : MonoBehaviour
     {
         if (other.TryGetComponent(out Loader loader))
         {
-            _loaders.Remove(loader);
+            _countLoaders--;
 
-            if (_loaders.Count == 0)
+            if (_countLoaders == 0)
                 _animator.SetBool(Open, false);
         }
     }
