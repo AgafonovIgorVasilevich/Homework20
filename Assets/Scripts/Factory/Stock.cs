@@ -5,10 +5,16 @@ using System;
 
 public class Stock : MonoBehaviour
 {
-    [SerializeField] private ResourcePool _resourcePool;
-    [SerializeField] private LoaderPool _loaderPool;
+    private ResourcePool _resourcePool;
+    private LoaderPool _loaderPool;
 
     public event Action ResourceReceived;
+
+    public void Initialize(ResourcePool resourcePool, LoaderPool loaderPool)
+    {
+        _resourcePool = resourcePool;
+        _loaderPool = loaderPool;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

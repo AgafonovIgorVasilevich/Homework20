@@ -1,5 +1,6 @@
 public enum LoaderState
 {
     Full,
-    Empty
+    Empty,
+    Migratory
 }

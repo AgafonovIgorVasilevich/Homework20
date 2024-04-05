@@ -1,14 +1,27 @@
 ﻿using UnityEngine;
+using System;
 using TMPro;
 
 public class ResourceScoreView : MonoBehaviour
 {
-    [SerializeField] private ResourceScore _score;
+    [SerializeField] private TextAnimator _animator;
     [SerializeField] private TMP_Text _text;
 
-    private void OnEnable() => _score.Changed += Show;
+    private ResourceScore _score;
+
+    public event Action TextChanged;
 
     private void OnDisable() => _score.Changed -= Show;
 
-    private void Show(int score) => _text.text = score.ToString();
+    public void Initialize(ResourceScore score)
+    {
+        _score = score;
+        _score.Changed += Show;
+    }
+
+    private void Show(int score)
+    {
+        _text.text = score.ToString();
+        _animator.Hihglight();
+    }
 }

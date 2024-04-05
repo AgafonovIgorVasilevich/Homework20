@@ -3,39 +3,62 @@ using System;
 
 public class LoaderSpawner : MonoBehaviour
 {
-    [SerializeField] private int _maxCount;
-    [SerializeField] private LoaderPool _pool;
+    [SerializeField] private Upgrader _upgrader;
+    [SerializeField] private Stock _stock;
 
-    private int _freeCount;
+    private int _freeCount => _maxCount - _currenCount;
+    private int _currenCount;
+    private int _maxCount;
 
-    public bool IsEmpty => _freeCount == 0;
+    private LoaderPool _pool;
+
+    public bool IsEmpty => _currenCount == _maxCount;
 
     public event Action<int, int> LoaderCountChanged;
 
-    private void Awake() => _freeCount = _maxCount;
+    private void OnEnable()
+    {
+        _upgrader.LoadredBuyed += IncreaseLoaderCount;
+        _stock.ResourceReceived += AddFreeLoader;
+    }
 
-    private void OnEnable() => _pool.InstancePuted += AddFreeLoader;
+    private void OnDisable()
+    {
+        _upgrader.LoadredBuyed -= IncreaseLoaderCount;
+        _stock.ResourceReceived -= AddFreeLoader;
+    }
 
-    private void OnDisable() => _pool.InstancePuted -= AddFreeLoader;
-
-    private void Start() => LoaderCountChanged?.Invoke(_freeCount, _maxCount);
+    public void Initialize(LoaderPool loaderPool) => _pool = loaderPool;
 
     public Loader GetFreeLoader()
     {
-        if(IsEmpty)
+        if (IsEmpty || _pool == null)
             return null;
 
         Loader loader = _pool.Get();
         loader.transform.position = transform.position;
         loader.transform.rotation = transform.rotation;
-        _freeCount--;
+        _currenCount++;
         LoaderCountChanged?.Invoke(_freeCount, _maxCount);
         return loader;
     }
 
+    public void IncreaseLoaderCount()
+    {
+        _maxCount++;
+        LoaderCountChanged?.Invoke(_freeCount, _maxCount);
+    }
+
+    public void DecreaseLoaderCount()
+    {
+        _maxCount--;
+        _currenCount--;
+        LoaderCountChanged?.Invoke(_freeCount, _maxCount);
+    }
+
     private void AddFreeLoader()
     {
-        _freeCount++;
+        _currenCount--;
         LoaderCountChanged?.Invoke(_freeCount, _maxCount);
     }
 }

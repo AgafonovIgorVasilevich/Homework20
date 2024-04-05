@@ -12,7 +12,7 @@ public class Resource : MonoBehaviour
     {
         _selectEffect.Stop();
         transform.position = position;
-        transform.LookAt(Vector3.zero);
+        transform.rotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
     }
 
     public void Mark() => _selectEffect.Play();

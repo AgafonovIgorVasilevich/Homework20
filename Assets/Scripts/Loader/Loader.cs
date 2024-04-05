@@ -19,11 +19,21 @@ public class Loader : MonoBehaviour
     public void Initialize(Route route, int idResource)
     {
         State = LoaderState.Empty;
-        _movement.Initialize(route);
+        _movement.DriveToLoad(route);
         _collector.SetTargetId(idResource);
     }
 
-    public Resource Unload() => _collector.UnloadResource();
+    public void Initialize(Vector3 target)
+    {
+        State = LoaderState.Migratory;
+        _movement.DriveToMigrate(target);
+    }
+
+    public Resource Unload()
+    {
+        State = LoaderState.Empty;
+        return _collector.UnloadResource();
+    }
 
     private void BecomeFull() => State = LoaderState.Full;
 }

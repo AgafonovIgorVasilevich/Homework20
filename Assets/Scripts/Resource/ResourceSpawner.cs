@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class ResourceSpawner : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class ResourceSpawner : MonoBehaviour
 
     private WaitForSeconds _delay = new WaitForSeconds(1);
     private int _currentCount = 0;
+
+    public event Action<Resource> ResorceSpawned;
 
     private void OnEnable() => _pool.InstancePuted += AddFreePlace;
 
@@ -28,7 +31,7 @@ public class ResourceSpawner : MonoBehaviour
 
         while (inProgress && countTries < maxTries)
         {
-            spawnPosition = Random.insideUnitSphere * _spawnRadius;
+            spawnPosition = UnityEngine.Random.insideUnitSphere * _spawnRadius;
             spawnPosition.y = _spawnHeight;
             countTries++;
 
@@ -47,7 +50,9 @@ public class ResourceSpawner : MonoBehaviour
         {
             if (_currentCount < _maxCount)
             {
-                _pool.Get().Initialize(GetSpawnPosition());
+                Resource resource = _pool.Get();
+                resource.Initialize(GetSpawnPosition());
+                ResorceSpawned?.Invoke(resource);
                 _currentCount++;
                 yield return _delay;
             }

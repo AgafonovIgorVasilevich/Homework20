@@ -3,12 +3,22 @@ using TMPro;
 
 public class LoaderCounterView : MonoBehaviour
 {
-    [SerializeField] private LoaderSpawner _spawner;
+    [SerializeField] private TextAnimator _animator;
     [SerializeField] private TMP_Text _text;
 
-    private void OnEnable() => _spawner.LoaderCountChanged += Show;
+    private LoaderSpawner _spawner;
 
     private void OnDisable() => _spawner.LoaderCountChanged -= Show;
 
-    private void Show(int current, int max) => _text.text = $"{current}/{max}";
+    public void Initialize(LoaderSpawner spawner)
+    {
+        _spawner = spawner;
+        _spawner.LoaderCountChanged += Show;
+    }
+
+    private void Show(int current, int max)
+    {
+        _text.text = $"{current}/{max}";
+        _animator.Hihglight();
+    }
 }

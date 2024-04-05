@@ -8,16 +8,26 @@ public class ResourceScore : MonoBehaviour
     private int _score;
 
     public event Action<int> Changed;
+    public event Action Increased;
 
     private void OnEnable() => _stock.ResourceReceived += Add;
 
     private void OnDisable() => _stock.ResourceReceived -= Add;
 
-    private void Start() => Changed?.Invoke(_score);
+    public bool IsPaid(int price)
+    {
+        if (price > _score)
+            return false;
+
+        _score -= price;
+        Changed?.Invoke(_score);
+        return true;
+    }
 
     private void Add()
     {
         _score++;
         Changed?.Invoke(_score);
+        Increased?.Invoke();
     }
 }
