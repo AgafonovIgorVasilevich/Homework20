@@ -29,11 +29,7 @@ public class Loader : MonoBehaviour
         _movement.DriveToMigrate(target);
     }
 
-    public Resource Unload()
-    {
-        State = LoaderState.Empty;
-        return _collector.UnloadResource();
-    }
+    public bool TryUnload(out Resource resource) => _collector.TryUnload(out resource);
 
     private void BecomeFull() => State = LoaderState.Full;
 }

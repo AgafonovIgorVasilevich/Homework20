@@ -11,6 +11,8 @@ public class Upgrader : MonoBehaviour
 
     public Vector3 BuildingPosition { get; private set; }
 
+    public bool IsUsed { get; private set; }
+
     public event Action LoadredBuyed;
     public event Action FactoryBuyed;
 
@@ -49,6 +51,7 @@ public class Upgrader : MonoBehaviour
         if(_score.IsPaid(_factoryCost))
         {
             _target = UpgradeTarget.Loader;
+            IsUsed = true;
             FactoryBuyed?.Invoke();
         }
     }

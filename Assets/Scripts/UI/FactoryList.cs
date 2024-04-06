@@ -9,27 +9,25 @@ public class FactoryList : MonoBehaviour
     [SerializeField] private RectTransform _view;
     [SerializeField] private Slider _scroller;
 
-    private float _scrolValue;
+    public void AddItem(FactoryStats item) => item.transform.SetParent(_content, false);
 
-    private void Update()
+    public void UpdateScroller()
     {
-        ResetScoller();
         ShowScroller();
-    }
-
-    private void ResetScoller()
-    {
-        if (_scrollView.verticalNormalizedPosition != _scrolValue)
-            _scroller.value = _scrollView.verticalNormalizedPosition;
-
-        _scrolValue = _scrollView.verticalNormalizedPosition;
+        ResetScoller();
     }
 
     private void ShowScroller()
     {
-        if (_content.rect.height > _view.rect.height)
+        if (_content.rect.height >= _view.rect.height)
             _scrollerPanel.gameObject.SetActive(true);
         else
             _scrollerPanel.gameObject.SetActive(false);
+    }
+
+    private void ResetScoller()
+    {
+        if (_scrollView.verticalNormalizedPosition != _scroller.value)
+            _scroller.value = _scrollView.verticalNormalizedPosition;
     }
 }

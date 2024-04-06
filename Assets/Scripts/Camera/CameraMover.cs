@@ -1,6 +1,7 @@
 ﻿using SplineMesh;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(Spline))]
 
@@ -10,6 +11,7 @@ public class CameraMover : MonoBehaviour
     private const string Vertical = nameof(Vertical);
     private const string Height = nameof(Height);
 
+    [SerializeField] private MouseHandler _mouse;
     [SerializeField] private PathLimits _limits;
     [SerializeField] private Transform _camera;
     [SerializeField] private float _moveSpeed;
@@ -18,28 +20,34 @@ public class CameraMover : MonoBehaviour
     [SerializeField] private float _sensetive;
 
     private CurveSample _sample;
+    private Transform _target;
     private Spline _path;
 
     private float _splineRate;
     private float _scale = 1;
     private float _height;
 
-    private Quaternion _rotation;
+    private Vector3 _targetPosition = Vector3.zero;
     private Vector3 _direction;
     private Vector3 _input;
+    private Quaternion _rotation;
+
+    private void OnEnable() => _mouse.Focused += SetTarget;
+
+    private void OnDisable() => _mouse.Focused -= SetTarget;
 
     private void Start()
     {
         _path = GetComponent<Spline>();
+        _height = transform.position.y;
 
         ChangePosition();
         Rotate();
-
-        _height = transform.position.y;
     }
 
     private void Update()
     {
+        MoveOrigin();
         Rotate();
 
         if (IsDetectedInput())
@@ -61,7 +69,11 @@ public class CameraMover : MonoBehaviour
 
     private void Rotate()
     {
-        _direction = Vector3.zero - _camera.position;
+        if (_target == null)
+            _direction = Vector3.zero - _camera.position;
+        else
+            _direction = _target.position - _camera.position;
+
         _rotation = Quaternion.LookRotation(_direction);
         _rotation = Quaternion.Lerp(_camera.rotation, _rotation, _sensetive * Time.unscaledDeltaTime);
         _camera.rotation = _rotation;
@@ -100,4 +112,18 @@ public class CameraMover : MonoBehaviour
         _sample = _path.GetSample(_splineRate);
         _camera.localPosition = _sample.location;
     }
+
+    private void MoveOrigin()
+    {
+        if (_target)
+            _targetPosition = _target.position;
+        else
+            _targetPosition = Vector3.zero;
+
+        _targetPosition.y = _height;
+        transform.position = Vector3.MoveTowards(transform.position, _targetPosition,
+            _sensetive * Time.unscaledDeltaTime);
+    }
+
+    private void SetTarget(Transform target) => _target = target;
 }

@@ -1,5 +1,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using System;
 
 public class MouseHandler : MonoBehaviour
 {
@@ -9,7 +10,11 @@ public class MouseHandler : MonoBehaviour
     private Upgrader _upgrader;
     private Ray _ray;
 
-    private void Update()
+    public event Action<Transform> Focused;
+
+    private void Update() => MouseMove();
+
+    private void MouseMove()
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
@@ -18,40 +23,33 @@ public class MouseHandler : MonoBehaviour
 
         if (Physics.Raycast(_ray, out RaycastHit hit))
         {
-            ShowFlagCursor(hit);
+            _flagCursor.transform.position = hit.point;
+            _flagCursor.SetVisible(_upgrader);
 
-            if (Input.GetMouseButtonDown(0) == false)
-                return;
-
-            if (_flagCursor.IsCorrect())
+            if (Input.GetMouseButtonDown(0))
+            {
+                Focused?.Invoke(hit.transform);
                 Build(hit.point);
-
-            GetUpgraderFromClick(hit);
+                GetUpgraderFromClick(hit);
+            }
         }
-    }
-
-    private void ShowFlagCursor(RaycastHit hit)
-    {
-        _flagCursor.gameObject.SetActive(_upgrader != null);
-        _flagCursor.transform.position = hit.point;
     }
 
     private void GetUpgraderFromClick(RaycastHit hit)
     {
-        if (hit.transform.TryGetComponent(out Factory factory))
+        if (hit.transform.TryGetComponent(out Upgrader upgrader) && upgrader.IsUsed == false)
         {
-            _upgrader = factory.TryGetUpgrader();
-
-            if (_upgrader != null)
-                _upgrader.FactoryBuyed += ResetUpgrader;
+            _upgrader = upgrader;
+            _upgrader.FactoryBuyed += ResetUpgrader;
         }
     }
 
     private void Build(Vector3 position)
     {
-        if (_upgrader == null)
+        if (_upgrader == null || _flagCursor.IsCorrect() == false)
             return;
 
+        Focused?.Invoke(_upgrader.transform);
         _upgrader.SetBuildingPriority(position);
         _builder.Build(position);
         ResetUpgrader();

@@ -8,7 +8,7 @@ public class Building : MonoBehaviour
 
     private ResourcePool _resourcePool;
     private LoaderPool _loaderPool;
-    private RectTransform _statsTable;
+    private FactoryList _statsTable;
     private NavMeshSurface _surface;
 
     public event Action BuildCompleted;
@@ -24,7 +24,7 @@ public class Building : MonoBehaviour
     }
 
     public void Initialize(NavMeshSurface surface, ResourcePool resourcePool,
-        LoaderPool loaderPool, RectTransform statsTable)
+        LoaderPool loaderPool, FactoryList statsTable)
     {
         _surface = surface;
         _resourcePool = resourcePool;
@@ -41,6 +41,5 @@ public class Building : MonoBehaviour
 
         _surface.BuildNavMesh();
         BuildCompleted?.Invoke();
-        Destroy(gameObject);
     }
 }

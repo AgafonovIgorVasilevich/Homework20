@@ -10,20 +10,25 @@ public class ResourceDetector : MonoBehaviour
 
     public event Action<float> SearchStarted;
 
-    public Resource FindResource()
+    public bool TryFindResource(out Resource resource)
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, _radius, _mask);
-
         SearchStarted?.Invoke(_radius);
 
         foreach (Collider hit in hits)
         {
-            if (hit.TryGetComponent(out Resource resource) && resource.IsMarked == false)
+            if (hit.TryGetComponent(out resource) && resource.IsMarked == false)
+            {
                 if (IsReachableResouce(resource))
-                    return resource;
-        }    
+                {
+                    resource.Mark();
+                    return true;
+                }
+            }
+        }
 
-        return null;
+        resource = null;
+        return false;
     }
 
     private bool IsReachableResouce(Resource resource)

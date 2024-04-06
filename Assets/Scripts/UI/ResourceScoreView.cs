@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using TMPro;
 
 public class ResourceScoreView : MonoBehaviour
@@ -8,8 +7,6 @@ public class ResourceScoreView : MonoBehaviour
     [SerializeField] private TMP_Text _text;
 
     private ResourceScore _score;
-
-    public event Action TextChanged;
 
     private void OnDisable() => _score.Changed -= Show;
 

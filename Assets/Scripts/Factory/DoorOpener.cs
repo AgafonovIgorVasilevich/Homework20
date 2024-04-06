@@ -6,9 +6,8 @@ public class DoorOpener : MonoBehaviour
 {
     private const string Open = nameof(Open);
 
-    private Animator _animator;
-
     private int _countLoaders = 0;
+    private Animator _animator;
 
     private void Awake() => _animator = GetComponent<Animator>();
 

@@ -6,7 +6,7 @@ public class MainFactory : MonoBehaviour
 {
     [SerializeField] private ResourcePool _resourcePool;
     [SerializeField] private LoaderPool _loaderPool;
-    [SerializeField] private RectTransform _statsTable;
+    [SerializeField] private FactoryList _statsTable;
     [SerializeField] private int _loadersCount = 3;
 
     private Factory _factory;

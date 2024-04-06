@@ -20,9 +20,13 @@ public class Stock : MonoBehaviour
     {
         if (other.TryGetComponent(out Loader loader) && loader.State == LoaderState.Full)
         {
-            _resourcePool.Put(loader.Unload());
+            if(loader.TryUnload(out Resource resource))
+            {
+                _resourcePool.Put(resource);
+                ResourceReceived?.Invoke();
+            }
+
             _loaderPool.Put(loader);
-            ResourceReceived?.Invoke();
         }
     }
 }

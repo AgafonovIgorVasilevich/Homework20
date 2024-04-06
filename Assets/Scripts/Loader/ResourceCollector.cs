@@ -20,16 +20,22 @@ public class ResourceCollector : MonoBehaviour
 
     public void SetTargetId(int resourceID) => _resourceID = resourceID;
 
-    public Resource UnloadResource()
+    public bool TryUnload(out Resource resource)
     {
-        Resource resource = _resource;
-        _resource = null;
+        resource = _resource;
 
-        return resource;
+        if (_resource)
+        {
+            _resource = null;
+            return true;
+        }
+
+        return false;
     }
 
     private void LoadResource(Resource resource)
     {
+        _resourceID = int.MinValue;
         _resource = resource;
         _resource.transform.parent = transform;
         _resource.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);

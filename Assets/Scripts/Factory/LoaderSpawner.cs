@@ -30,17 +30,20 @@ public class LoaderSpawner : MonoBehaviour
 
     public void Initialize(LoaderPool loaderPool) => _pool = loaderPool;
 
-    public Loader GetFreeLoader()
+    public bool TryGetLoader(out Loader loader)
     {
         if (IsEmpty || _pool == null)
-            return null;
+        {
+            loader = null;
+            return false;
+        }
 
-        Loader loader = _pool.Get();
+        loader = _pool.Get();
         loader.transform.position = transform.position;
         loader.transform.rotation = transform.rotation;
         _currenCount++;
         LoaderCountChanged?.Invoke(_freeCount, _maxCount);
-        return loader;
+        return true;
     }
 
     public void IncreaseLoaderCount()

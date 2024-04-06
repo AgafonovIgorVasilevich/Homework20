@@ -17,7 +17,6 @@ public class Factory : MonoBehaviour
 
     [SerializeField] private float _searchTime = 3;
 
-    private bool _isReadyToBuild = true;
     private RouteCreator _routeCreator;
     private string _name;
 
@@ -32,23 +31,16 @@ public class Factory : MonoBehaviour
 
     private void OnDisable() => _upgrader.FactoryBuyed -= BuildNewFactory;
 
-    public void Initialize(ResourcePool resourcePool, LoaderPool loaderPool, RectTransform statsTable)
+    public void Initialize(ResourcePool resourcePool, LoaderPool loaderPool, FactoryList statsTable)
     {
         _stok.Initialize(resourcePool, loaderPool);
         _spawner.Initialize(loaderPool);
-        _stats = Instantiate(_stats, statsTable);
+        _stats = Instantiate(_stats);
         _stats.Initialize(_score, _spawner, _name);
+        statsTable.AddItem(_stats);
     }
 
     public void IncreaseLoaderCount() => _spawner.IncreaseLoaderCount();
-
-    public Upgrader TryGetUpgrader()
-    {
-        if (_isReadyToBuild)
-            return _upgrader;
-        else
-            return null;
-    }
 
     private void SetName()
     {
@@ -59,23 +51,18 @@ public class Factory : MonoBehaviour
 
     private void SendLoaderToLoad()
     {
-        Resource resource = _detector.FindResource();
-
-        if (resource == null)
+        if(_detector.TryFindResource(out Resource resource) == false)
             return;
 
-        resource.Mark();
-
         Route route = _routeCreator.CreateRoute(resource.transform);
-        Loader loader = _spawner.GetFreeLoader();
 
-        loader.Initialize(route, resource.GetInstanceID());
+        if (_spawner.TryGetLoader(out Loader loader))
+            loader.Initialize(route, resource.GetInstanceID());
     }
 
     private void BuildNewFactory()
     {
         _stats.HideFlagIndicator();
-        _isReadyToBuild = false;
         StartCoroutine(Build());
     }
 
@@ -94,13 +81,10 @@ public class Factory : MonoBehaviour
 
     private IEnumerator Build()
     {
-        Loader loader = null;
+        Loader loader;
 
-        while (loader == null)
-        {
-            loader = _spawner.GetFreeLoader();
+        while (_spawner.TryGetLoader(out loader) == false)
             yield return null;
-        }
 
         _spawner.DecreaseLoaderCount();
         loader.Initialize(_upgrader.BuildingPosition);

@@ -15,6 +15,8 @@ public class FlagCursor : MonoBehaviour
 
     private void Update() => Repaint();
 
+    public void SetVisible(bool value) => _renderer.enabled = value;
+
     public bool IsCorrect()
     {
         foreach (Transform checker in _checkerPoints)

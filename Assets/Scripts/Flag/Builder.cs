@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Builder : MonoBehaviour
 {
-    [SerializeField] private RectTransform _statsTable;
     [SerializeField] private BuildingPool _buildingPool;
     [SerializeField] private ResourcePool _resourcePool;
     [SerializeField] private LoaderPool _loaderPool;
+    [SerializeField] private FactoryList _statsTable;
     [SerializeField] private NavMeshSurface _surface;
 
     private Building _building;
@@ -28,6 +28,7 @@ public class Builder : MonoBehaviour
     private void ResetBuilding()
     {
         _building.BuildCompleted -= ResetBuilding;
+        _buildingPool.Put(_building);
         _building = null;
     }
 }
